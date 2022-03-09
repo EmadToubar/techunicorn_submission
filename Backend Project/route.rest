@@ -1,0 +1,86 @@
+GET http://localhost:3000/doctors
+
+###
+GET http://localhost:3000/appointments/patient/Zar
+###
+
+GET http://localhost:3000/doctors/622753ac43f394ac777cadff
+
+###
+http://localhost:3000/doctors/622852ee10a27d9e8ecc2a66/slots
+###
+
+POST http://localhost:3000/doctors
+Content-Type: application/json
+authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImR1bW15NEB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTY0NjgwNzkyNiwiZXhwIjoxNjQ2ODExNTI2fQ.hgngGvUFnfG13cVJXL5q-fJw1VCrrH9E0Ha9u-v5nT8 
+
+{
+    "name": "Dr. Zanke",
+    "appointment":"2001-4-5",
+    "slots": ["8:00"]
+   
+}
+###
+
+PATCH  http://localhost:3000/doctors/622753ac43f394ac777cadff
+Content-Type: application/json
+
+
+[{
+    "propName": "name",
+    "value": "Dr. Mongo"
+}]
+
+###
+
+
+POST http://localhost:3000/appointments/
+Content-Type: application/json
+authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImR1bW15NEB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTY0NjgwNzkyNiwiZXhwIjoxNjQ2ODExNTI2fQ.hgngGvUFnfG13cVJXL5q-fJw1VCrrH9E0Ha9u-v5nT8 
+
+{
+
+  "doctorId":"622790964eb93bd056ddc267",
+  "patient":"Rson",
+  "date":"2018-12-10",
+  "duration":145
+
+}
+
+###
+
+GET http://localhost:3000/appointments/
+
+{
+  "role":"ADMIN"
+}
+
+###
+
+GET http://localhost:3000/appointments/62279ae502ecbb161e8b619f
+
+###
+
+DELETE http://localhost:3000/appointments/62279152ba3bd12a40b97a64
+
+###
+POST  http://localhost:3000/user/register
+Content-Type: application/json
+
+{
+  "name": "Patient",
+  "email": "dummy5@test.com",
+  "password": "testpass",
+  "role": "CLIENT"
+}
+
+###
+
+POST  http://localhost:3000/user/login
+Content-Type: application/json
+
+{
+  "email": "dummy4@test.com",
+  "password": "testpass"
+}
+
