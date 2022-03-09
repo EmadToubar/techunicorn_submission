@@ -4,8 +4,10 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const User = require('../../models/user')
+const User = require('../../models/user');
+const { authUser } = require("../middleware/roleAuth");
 
+//Route to register a user account into the database
 router.post('/register', (req, res, next) => {
     User.find({email: req.body.email})
     .exec()
@@ -50,6 +52,7 @@ router.post('/register', (req, res, next) => {
     
 })
 
+//Route to log a user into the system and authenticate them
 router.post('/login', (req,res,next) => {
     User.find({email: req.body.email})
     .exec()
@@ -88,8 +91,8 @@ router.post('/login', (req,res,next) => {
     });;
 })
 
-
-router.delete('/:userId', (req,res,next) => {
+//Route to delete a user (Only authorized to admin)
+router.delete('/:userId', authUser(['ADMIN']),(req,res,next) => {
     User.remove({_id: req.params.userId})
     .exec()
     .then(result => {

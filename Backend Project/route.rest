@@ -1,3 +1,4 @@
+
 GET http://localhost:3000/doctors
 
 ###
@@ -69,7 +70,7 @@ Content-Type: application/json
 
 {
   "name": "Patient",
-  "email": "dummy5@test.com",
+  "email": "dummy7@test.com",
   "password": "testpass",
   "role": "CLIENT"
 }

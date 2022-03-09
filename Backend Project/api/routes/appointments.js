@@ -7,6 +7,7 @@ const {authUser} = require('../middleware/roleAuth')
 const Appointment = require('../../models/appointment');
 const Doctor = require("../../models/doctor")
 
+//Route to list all appointment in the database (Only authorized to doctor and clinic admin)
 router.get('/', checkAuth, authUser(['ADMIN']),(req,res,next) => {
     Appointment
     .find()
@@ -42,7 +43,7 @@ router.get('/', checkAuth, authUser(['ADMIN']),(req,res,next) => {
 
 
 
-//Patient search 
+//Route to search the appointments containing a specific patient
 router.get('/patient/:patientName', (req,res,next) => {
     Appointment
     .find()
@@ -82,6 +83,7 @@ router.get('/patient/:patientName', (req,res,next) => {
     });
 })
 
+//Route to create an appointment (Only authorized to patient)
 router.post('/', checkAuth, authUser(['CLIENT']), (req,res,next) => {
     Doctor.findById(req.body.doctorId)
     .then(doctor => {
@@ -131,6 +133,7 @@ router.post('/', checkAuth, authUser(['CLIENT']), (req,res,next) => {
 
 });
 
+//Route to look for a specific appointment using its ID
 router.get('/:appointmentId', checkAuth, (req,res,next) => {
 Appointment.findById(req.params.appointmentId)
 .exec()
@@ -155,7 +158,7 @@ Appointment.findById(req.params.appointmentId)
 });
 })
 
-
+//Route to cancel an appointment
 router.delete('/:appointmentId', checkAuth, (req,res,next) => {
     Appointment.remove({_id: req.params.orderId})
     .exec()

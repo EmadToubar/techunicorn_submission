@@ -3,11 +3,12 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const Doctor = require('../../models/doctor')
 const checkAuth = require('../middleware/check-auth')
+const {authUser} = require('../middleware/roleAuth')
 
 
 module.exports = router
 
-//Listing all doctors
+//Route to list all doctors
 router.get('/', async (req,res)=> {
 try{
     const doctors = await Doctor.find()
@@ -18,7 +19,7 @@ try{
 
 })
 
-//Listing a doctor
+//Route to list a specific doctor using their ID
 router.get('/:doctorId', getDoctor, (req,res)=> {
     const id = req.params.doctorId;
     Doctor.findById(id)
@@ -34,7 +35,7 @@ router.get('/:doctorId', getDoctor, (req,res)=> {
     
 })
 
-//Listing a doctor's slots
+//Route to list a doctor's time slots
 router.get('/:doctorId/slots', getDoctor, (req,res)=> {
     const id = req.params.doctorId;
     Doctor.findById(id)
@@ -50,8 +51,8 @@ router.get('/:doctorId/slots', getDoctor, (req,res)=> {
     
 })
 
-//Creating a doctor account
-router.post('/', checkAuth, async (req,res)=> {
+//Route to create a doctor in the database (Only authorized to clinic admin)
+router.post('/', checkAuth, authUser(['ADMIN']), async (req,res)=> {
     const doctor = new Doctor({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -69,7 +70,7 @@ router.post('/', checkAuth, async (req,res)=> {
     
 })
 
-//Updating a doctor
+//Route to update doctor details
 router.patch('/:doctorId', checkAuth, getDoctor, (req,res)=> {
     const id = req.params.doctorId;
     const updateOps = {};
@@ -91,8 +92,8 @@ router.patch('/:doctorId', checkAuth, getDoctor, (req,res)=> {
     
 })
 
-//Deleting a doctor
-router.delete('/:doctorId', checkAuth, getDoctor, (req,res)=> {
+//Route to delete a doctor from the database using their ID (Only authorized to admin)
+router.delete('/:doctorId', checkAuth, authUser(['ADMIN']), getDoctor, (req,res)=> {
     const id = req.params.doctorId
     Doctor.remove({doctorId})
     .exec()
@@ -108,6 +109,7 @@ router.delete('/:doctorId', checkAuth, getDoctor, (req,res)=> {
     
 })
 
+//Function that obtains doctor object
 async function getDoctor(req, res, next){
 let doctor
     try{
